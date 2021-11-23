@@ -1,0 +1,102 @@
+
+promo_data_fabricator:
+  item:
+    num_rows: 3
+    columns:
+      business_unit_id:
+        type: generate_unique_id
+      item_id:
+        type: generate_unique_id
+
+  location:
+    num_rows: 1
+    columns:
+      business_unit_id:
+        type: generate_unique_id
+      location_id:
+        type: generate_unique_id
+
+  customer:
+    num_rows: 1
+    columns:
+      business_unit_id:
+        type: generate_unique_id
+      customer_id:
+        type: generate_unique_id
+
+  promo_event:
+    num_rows: 1
+    columns:
+      business_unit_id:
+        type: generate_unique_id
+      promo_event_id:
+        type: generate_unique_id
+      start_date:  # hard code here to define start_date
+        type: generate_dates
+        start_dt: 2021-10-01
+        end_dt: 2021-10-01
+        freq: d
+      end_date:  # hard code here to define end_date
+       type: generate_dates
+       start_dt: 2021-10-07
+       end_dt: 2021-10-07
+       freq: d
+
+  pos_transaction:
+    num_rows: 6
+    columns:
+      business_unit_id:
+        type: generate_unique_id
+      transaction_id:
+        type: generate_unique_id
+      transaction_line_id:
+        type: generate_unique_id
+      item_id:
+        type: row_apply
+        list_of_values: item.item_id
+        row_func: "lambda x: x"
+        resize: true
+      location_id:
+        type: row_apply
+        list_of_values: location.location_id
+        row_func: "lambda x: x"
+        resize: true
+      customer_id:
+        type: row_apply
+        list_of_values: customer.customer_id
+        row_func: "lambda x: x"
+        resize: true
+      transaction_time:
+       type: generate_dates
+       start_dt: 2021-10-01
+       end_dt: 2021-10-31
+       freq: d
+
+  pos_transaction_promo_coupon:
+    num_rows: 2
+    columns:
+      business_unit_id:
+        type: generate_unique_id
+      transaction_id:
+        type: row_apply
+        list_of_values: pos_transaction.transaction_id
+        row_func: "lambda x: x"
+        resize: true
+      transaction_line_id:
+        type: row_apply
+        list_of_values: pos_transaction.transaction_line_id
+        row_func: "lambda x: x"
+        resize: true
+      promo_event_id:
+        type: row_apply
+        list_of_values: promo_event.promo_event_id
+        row_func: "lambda x: x"
+        resize: true
+      discount_amount:
+        type: row_apply
+        list_of_values: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+        row_func: "lambda x: x"
+        resize: true
+
+
+
